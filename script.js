@@ -934,7 +934,7 @@ Format code examples using \`\`\`java code blocks.`;
     messages.push({ role: 'user', content: text });
   }
 
-  const resp = await fetch('https://localhost:3000/api/chat', {
+  const resp = await fetch('https://javabot-omn4.onrender.com/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ messages, system: SYSTEM, model })
@@ -993,7 +993,7 @@ function setupSpeech() {
     const msgs = {
       'not-allowed': '🎤 Microphone blocked! Click the 🔒 icon in address bar → Allow microphone.',
       'no-speech': '🎤 No speech detected. Try again.',
-      'network': '🎤 Network error. Make sure you\'re on https://localhost:3000.',
+      'network': '🎤 Network error. Make sure you\'re on https://javabot-omn4.onrender.com.',
       'audio-capture': '🎤 No microphone found. Check your device.',
     };
     alert(msgs[e.error] || `🎤 Speech error: ${e.error}`);

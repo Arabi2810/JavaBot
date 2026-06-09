@@ -23,7 +23,7 @@ const sslOptions = {
   key: fs.readFileSync('C:/Users/Lenovo/.mkcert-cli/certs/dev.key'),
   cert: fs.readFileSync('C:/Users/Lenovo/.mkcert-cli/certs/dev.cert')
 };
-const server = https.createServer(sslOptions, (req, res) => {
+const server = http.createServer((req, res) => {
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
       'Access-Control-Allow-Origin': '*',
@@ -32,7 +32,15 @@ const server = https.createServer(sslOptions, (req, res) => {
     });
     return res.end();
   }
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
   // Serve static files
   if (req.method === 'GET' && req.url !== '/api/chat') {
     const fs = require('fs');
@@ -158,7 +166,7 @@ const server = https.createServer(sslOptions, (req, res) => {
 server.listen(PORT, () => {
   console.log('');
   console.log('  ☕  JavaBot Server');
-  console.log(`  🚀  Running at https://localhost:${PORT}`);
+  console.log(`  🚀  Running at http://localhost:${PORT}`);
   if (API_KEY === 'YOUR_GROQ_API_KEY_HERE') {
     console.log('  ⚠️   API KEY NOT SET — open server.js and add your Groq key!');
   } else {
