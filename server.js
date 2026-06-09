@@ -1,8 +1,6 @@
 require('dotenv').config();
 
 const http = require('http');
-const https = require('https');
-const fs = require('fs');
 const API_KEY = process.env.GROQ_API_KEY || '';
 const PORT = 3000;
 
@@ -19,10 +17,7 @@ function sendJSON(res, status, data) {
     });
   res.end(body);
 }
-const sslOptions = {
-  key: fs.readFileSync('C:/Users/Lenovo/.mkcert-cli/certs/dev.key'),
-  cert: fs.readFileSync('C:/Users/Lenovo/.mkcert-cli/certs/dev.cert')
-};
+
 const server = http.createServer((req, res) => {
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
