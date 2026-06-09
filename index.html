@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaBot</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════ AUTH SCREEN ══════════════════════════════════ -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-bg-grid"></div>
+    <div class="auth-container">
+      <div class="auth-logo">
+        <span class="auth-logo-icon">☕</span>
+        <span class="auth-logo-text">JavaBot</span>
+      </div>
+      <p class="auth-tagline">Your AI-powered Java tutor</p>
+
+      <!-- Sign In Panel -->
+      <div id="auth-signin" class="auth-panel active">
+        <h2 class="auth-title">Welcome back</h2>
+
+        <div id="google-signin-btn" class="google-gsi-wrap"></div>
+
+        <div class="auth-divider"><span>or</span></div>
+
+        <div class="auth-field">
+          <label>Email</label>
+          <input type="email" id="signin-email" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="auth-field">
+          <label>Password</label>
+          <input type="password" id="signin-password" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+
+        <button id="btn-email-signin" class="btn-primary">Sign in</button>
+
+        <p class="auth-switch">Don't have an account? <a id="go-signup" href="#">Sign up</a></p>
+      </div>
+
+      <!-- Sign Up Panel -->
+      <div id="auth-signup" class="auth-panel">
+        <h2 class="auth-title">Create account</h2>
+
+        <div id="google-signup-btn" class="google-gsi-wrap"></div>
+
+        <div class="auth-divider"><span>or</span></div>
+
+        <div class="auth-field">
+          <label>Full Name</label>
+          <input type="text" id="signup-name" placeholder="Your Name" autocomplete="name" />
+        </div>
+        <div class="auth-field">
+          <label>Email</label>
+          <input type="email" id="signup-email" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="auth-field">
+          <label>Password</label>
+          <input type="password" id="signup-password" placeholder="Min 8 characters" autocomplete="new-password" />
+        </div>
+        <div class="password-strength" id="signup-strength" style="display:none">
+        <div class="strength-bars">
+          <div class="strength-bar" id="sb1"></div>
+          <div class="strength-bar" id="sb2"></div>
+          <div class="strength-bar" id="sb3"></div>
+          <div class="strength-bar" id="sb4"></div>
+        </div>
+        <div class="strength-rules">
+          <div class="strength-rule" id="rule-upper"><span class="rule-icon"></span> One uppercase letter</div>
+          <div class="strength-rule" id="rule-lower"><span class="rule-icon"></span> One lowercase letter</div>
+          <div class="strength-rule" id="rule-number"><span class="rule-icon"></span> One number</div>
+          <div class="strength-rule" id="rule-special"><span class="rule-icon"></span> One special character (!@#$...)</div>
+        </div>
+      </div>
+
+        <button id="btn-email-signup" class="btn-primary">Create account</button>
+
+        <p class="auth-switch">Already have an account? <a id="go-signin" href="#">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ MAIN APP ══════════════════════════════════ -->
+  <div id="app" class="app hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="brand-icon">☕</span>
+          <span class="brand-name">JavaBot</span>
+        </div>
+        <button id="btn-new-chat" class="btn-new-chat" title="New Chat">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New chat
+        </button>
+      </div>
+
+      <div class="sidebar-chats" id="chat-list"></div>
+
+      <!-- USER ACCOUNT SECTION -->
+      <div class="sidebar-footer">
+        <div class="user-account" id="user-account-btn">
+          <div class="user-avatar" id="user-avatar-display">?</div>
+          <div class="user-info">
+            <div class="user-name" id="user-name-display">User</div>
+            <div class="user-email" id="user-email-display">user@email.com</div>
+          </div>
+          <svg class="user-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+        </div>
+
+        <!-- Account Popup Menu -->
+        <div class="account-menu hidden" id="account-menu">
+          <button id="menu-settings">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            Settings
+          </button>
+          <div class="menu-divider"></div>
+          <button id="menu-logout" class="menu-logout">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Log out
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CHAT AREA -->
+    <main class="main">
+      <div class="chat-header">
+        <button id="btn-toggle-sidebar" class="btn-toggle-sidebar" title="Toggle sidebar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <h1 class="chat-title" id="chat-title">New Conversation</h1>
+      </div>
+
+      <div class="messages" id="messages">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon">☕</div>
+          <h2>Ask me anything about Java</h2>
+          <p>I can help with syntax, OOP, Spring, data structures, algorithms, and more.</p>
+          <div class="suggestions">
+            <button class="suggestion-chip" data-text="What is an inner class in Java?">Inner classes</button>
+            <button class="suggestion-chip" data-text="Explain Java OOP concepts with examples">OOP concepts</button>
+            <button class="suggestion-chip" data-text="How does Java garbage collection work?">Garbage collection</button>
+            <button class="suggestion-chip" data-text="Write a Java LinkedList implementation">LinkedList example</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ATTACHMENT PREVIEW -->
+      <div class="attachment-preview" id="attachment-preview"></div>
+
+      <!-- INPUT BAR -->
+      <div class="input-area">
+        <div class="input-box">
+          <button id="btn-attach-image" class="input-action" title="Attach Image">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </button>
+          <button id="btn-attach-file" class="input-action" title="Attach File">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          </button>
+          <textarea id="chat-input" placeholder="Ask a Java question…" rows="1"></textarea>
+          <button id="btn-mic" class="input-action mic-btn" title="Voice Input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+          <button id="btn-send" class="btn-send" title="Send">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <p class="input-hint">Only Java questions answered · Enter to send · Shift+Enter for new line</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Hidden file inputs -->
+  <input type="file" id="image-input" accept="image/*" multiple style="display:none" />
+  <input type="file" id="file-input" multiple style="display:none" />
+
+  <!-- ══════════════════════════════════ SETTINGS MODAL ══════════════════════════════════ -->
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button id="close-settings" class="modal-close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Settings Tabs -->
+      <div class="modal-tabs">
+        <button class="modal-tab active" data-tab="profile">Profile</button>
+        <button class="modal-tab" data-tab="appearance">Appearance</button>
+      </div>
+
+      <!-- Profile Tab -->
+      <div class="modal-tab-content active" id="tab-profile">
+        <div class="profile-avatar-section">
+          <div class="profile-avatar-large" id="profile-avatar-large">?</div>
+          <button class="btn-change-avatar" id="btn-change-avatar">Change photo</button>
+          <input type="file" id="avatar-file-input" accept="image/*" style="display:none" />
+        </div>
+
+        <div class="settings-field">
+          <label>Full Name</label>
+          <input type="text" id="settings-name" placeholder="Your name" />
+        </div>
+        <div class="settings-field">
+          <label>Email</label>
+          <input type="email" id="settings-email" placeholder="your@email.com" />
+        </div>
+        <div class="settings-field">
+          <label>New Password <span class="optional">(leave blank to keep current)</span></label>
+          <input type="password" id="settings-password" placeholder="New password" />
+        </div>
+
+        <div class="password-strength" id="settings-strength" style="display:none">
+        <div class="strength-bars">
+          <div class="strength-bar" id="ssb1"></div>
+          <div class="strength-bar" id="ssb2"></div>
+          <div class="strength-bar" id="ssb3"></div>
+          <div class="strength-bar" id="ssb4"></div>
+        </div>
+        <div class="strength-rules">
+          <div class="strength-rule" id="srule-length"><span class="rule-icon"></span> At least 8 characters</div>
+          <div class="strength-rule" id="srule-upper"><span class="rule-icon"></span> One uppercase letter</div>
+          <div class="strength-rule" id="srule-lower"><span class="rule-icon"></span> One lowercase letter</div>
+          <div class="strength-rule" id="srule-number"><span class="rule-icon"></span> One number</div>
+          <div class="strength-rule" id="srule-special"><span class="rule-icon"></span> One special character (!@#$...)</div>
+        </div>
+      </div>
+        <button id="btn-save-profile" class="btn-primary">Save changes</button>
+        <div class="settings-save-msg hidden" id="settings-save-msg">✓ Profile saved</div>
+      </div>
+
+      <!-- Appearance Tab -->
+      <div class="modal-tab-content" id="tab-appearance">
+        <div class="appearance-section">
+          <h3>Theme</h3>
+          <div class="theme-options">
+            <button class="theme-option" data-theme="dark" id="theme-dark">
+              <div class="theme-preview theme-preview-dark">
+                <div class="tp-sidebar"></div>
+                <div class="tp-main">
+                  <div class="tp-msg tp-msg-user"></div>
+                  <div class="tp-msg tp-msg-bot"></div>
+                </div>
+              </div>
+              <span>Dark</span>
+            </button>
+            <button class="theme-option" data-theme="light" id="theme-light">
+              <div class="theme-preview theme-preview-light">
+                <div class="tp-sidebar"></div>
+                <div class="tp-main">
+                  <div class="tp-msg tp-msg-user"></div>
+                  <div class="tp-msg tp-msg-bot"></div>
+                </div>
+              </div>
+              <span>Light</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="appearance-section">
+          <h3>Accent Color</h3>
+          <div class="accent-options">
+            <button class="accent-option active" data-color="#f59e0b" style="background:#f59e0b" title="Amber"></button>
+            <button class="accent-option" data-color="#3b82f6" style="background:#3b82f6" title="Blue"></button>
+            <button class="accent-option" data-color="#10b981" style="background:#10b981" title="Emerald"></button>
+            <button class="accent-option" data-color="#ef4444" style="background:#ef4444" title="Red"></button>
+            <button class="accent-option" data-color="#8b5cf6" style="background:#8b5cf6" title="Purple"></button>
+            <button class="accent-option" data-color="#ec4899" style="background:#ec4899" title="Pink"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="firebase.js"></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
