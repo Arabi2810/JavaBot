@@ -285,13 +285,39 @@ a:hover { text-decoration: underline; }
 /* ════════════════════════════════════════════════
    APP LAYOUT
    ════════════════════════════════════════════════ */
-.app {
+   .app {
   display: flex;
-  height: 100vh;
+  height: 100dvh;   /* was 100vh — dvh = actual visible viewport */
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .app { position: relative; }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    z-index: 500;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+  .sidebar:not(.collapsed) {
+    transform: translateX(0);
+    width: 260px;
+    min-width: 260px;
+  }
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+  }
+
+  .main {
+    width: 100%;
+  }
+}
 /* ─── Sidebar ─── */
+
 .sidebar {
   width: var(--sidebar-w);
   min-width: var(--sidebar-w);
@@ -312,6 +338,7 @@ a:hover { text-decoration: underline; }
   gap: 8px;
   margin-bottom: 12px;
 }
+
 .brand-icon { font-size: 22px; }
 .brand-name {
   font-family: var(--font-mono);

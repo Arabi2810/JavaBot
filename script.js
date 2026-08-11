@@ -357,7 +357,7 @@ function loadChat(id) {
   if (chat.messages.length === 0) {
     messagesEl.appendChild(createEmptyState());
   } else {
-    chat.messages.forEach(msg => appendMessage(msg.role, msg.content, false));
+    chat.messages.forEach(msg => appendMessage(msg.role, msg.content, false, [], msg.timestamp));
   }
 
   renderChatList();
@@ -470,7 +470,7 @@ function createEmptyState() {
   return div;
 }
 
-function appendMessage(role, content, save = true, images = []) {
+function appendMessage(role, content, save = true, images = [], timestamp = null)  {
   const empty = document.getElementById('empty-state');
   if (empty) empty.remove();
 
@@ -658,18 +658,19 @@ images.forEach(img => {
     actions.appendChild(copyBtn);
   }
 
- const timestamp = document.createElement('div');
-  timestamp.className = 'msg-timestamp';
-  timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const timestampEl = document.createElement('div');
+  timestampEl.className = 'msg-timestamp';
+  const ts = timestamp ? new Date(timestamp) : new Date();
+  timestampEl.textContent = ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   wrapper.appendChild(actions);
-  wrapper.appendChild(timestamp);
+  wrapper.appendChild(timestampEl);
   messagesEl.appendChild(wrapper);
   messagesEl.scrollTo({ top: messagesEl.scrollHeight, behavior: 'smooth' });
 
   if (save) {
     const chat = getCurrentChat();
     if (chat) {
-      chat.messages.push({ role, content: content || '' });
+      chat.messages.push({ role, content: content || '', timestamp: ts.toISOString() });
       saveChats();
     }
   }
