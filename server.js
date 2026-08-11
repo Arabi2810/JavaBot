@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const http = require('http');
+const https = require('https'); 
 const API_KEY = process.env.GROQ_API_KEY || '';
 const PORT = 3000;
 
