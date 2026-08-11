@@ -1074,6 +1074,9 @@ document.addEventListener('DOMContentLoaded', () => {
       sendMessage();
     });
   });
+  if (window.innerWidth <= 768) {
+   document.querySelector('.sidebar').classList.add('collapsed');
+  }
   document.getElementById('btn-toggle-sidebar').addEventListener('click', () => {
   document.querySelector('.sidebar').classList.toggle('collapsed');
 });
