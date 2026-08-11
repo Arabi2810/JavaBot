@@ -1080,7 +1080,14 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-toggle-sidebar').addEventListener('click', () => {
   document.querySelector('.sidebar').classList.toggle('collapsed');
 });
-  document.addEventListener('click', () => {
+  document.addEventListener('click', (e) => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleBtn = document.getElementById('btn-toggle-sidebar');
+    if (window.innerWidth <= 768 && !sidebar.classList.contains('collapsed')) {
+      if (!sidebar.contains(e.target) && e.target !== toggleBtn && !toggleBtn.contains(e.target)) {
+        sidebar.classList.add('collapsed');
+      }
+    }
     document.querySelectorAll('.chat-item-menu').forEach(m => m.classList.add('hidden'));
   });
 });
