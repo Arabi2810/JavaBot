@@ -51,12 +51,7 @@ async function showApp() {
   try {
     chats = await fbLoadChats(currentUser.uid);
   } catch { chats = []; }
-  if (chats.length > 0) {
-    const lastId = localStorage.getItem('jb_last_chat');
-    const restore = lastId && chats.find(c => c.id === lastId);
-    loadChat(restore ? lastId : chats[0].id);
-  }
-  else createNewChat();
+  createNewChat();
   renderChatList();
 }
 
