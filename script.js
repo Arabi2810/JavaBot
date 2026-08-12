@@ -888,8 +888,8 @@ async function callGroq(userText, images, files) {
 
   const hasImages = images.length > 0;
   const model = hasImages
-    ? 'meta-llama/llama-4-scout-17b-16e-instruct'
-    : 'llama-3.3-70b-versatile';
+  ? 'qwen/qwen3.6-27b'   
+  : 'llama-3.3-70b-versatile';
 
   const SYSTEM = `You are JavaBot — an expert Java programming assistant. You ONLY answer questions related to the Java programming language and its ecosystem (JVM, Spring, Hibernate, Maven, Gradle, Android, data structures, OOP, design patterns, concurrency, etc.).
 
