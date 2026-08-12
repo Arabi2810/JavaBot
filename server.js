@@ -93,7 +93,7 @@ const server = http.createServer((req, res) => {
       );
 
       const groqModel = model || (hasImages
-        ? 'meta-llama/llama-4-scout-17b-16e-instruct'
+        ? 'qwen/qwen3.6-27b'
         : 'llama-3.3-70b-versatile');
 
       console.log(`[REQUEST] model: ${groqModel}, messages: ${messages.length}, hasImages: ${hasImages}`);
