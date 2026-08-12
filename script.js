@@ -1007,7 +1007,8 @@ async function toggleSpeech() {
     recognition.stop();
   } else {
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop());
       recognition.start();
     } catch {
       alert('🎤 Microphone permission denied. Check browser settings.');
