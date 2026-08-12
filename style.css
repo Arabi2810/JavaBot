@@ -315,6 +315,9 @@ a:hover { text-decoration: underline; }
   .main {
     width: 100%;
   }
+  .message.bot {
+    max-width: 95%;
+  }
 }
 /* ─── Sidebar ─── */
 
