@@ -328,16 +328,11 @@ function saveChats() {
 }
 
 function createNewChat() {
-  const id = Date.now().toString();
-  const chat = {
-    id,
-    title: 'New Conversation',
-    messages: [],
-    createdAt: new Date().toISOString()
-  };
-  chats.unshift(chat);
-  saveChats();
-  loadChat(id);
+  currentChatId = null;
+  chatTitle.textContent = 'New Conversation';
+  messagesEl.innerHTML = '';
+  messagesEl.appendChild(createEmptyState());
+  clearAttachments();
   renderChatList();
 }
 
@@ -842,10 +837,17 @@ async function sendMessage() {
   chatInput.style.height = 'auto';
 
 
-  const idx = chats.findIndex(c => c.id === currentChatId);
-  if (idx > 0) {
-    const [chat] = chats.splice(idx, 1);
+  if (!currentChatId) {
+    const id = Date.now().toString();
+    const chat = { id, title: 'New Conversation', messages: [], createdAt: new Date().toISOString() };
     chats.unshift(chat);
+    currentChatId = id;
+  } else {
+    const idx = chats.findIndex(c => c.id === currentChatId);
+    if (idx > 0) {
+      const [chat] = chats.splice(idx, 1);
+      chats.unshift(chat);
+    }
   }
   appendMessage('user', text || '', true, imgs);
   localStorage.setItem('jb_last_chat', currentChatId);
